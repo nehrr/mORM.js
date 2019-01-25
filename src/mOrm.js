@@ -20,23 +20,21 @@ export default class mOrm {
         }
 
         this.config = require(this.configPathName);
-        console.log(this.config);
       } else {
         this.config = dbConfig;
       }
     } else if (typeof dbConfig === "string") {
       const regExp = /(.*):\/\/(.*):(.*)@(.*):(.*)\/(.*)/gm;
-      dbConfigSplit = myRegexp.exec(dbConfig);
+      var dbConfigSplit = regExp.exec(dbConfig);
 
       let newConfig = {
-        type: match[1],
-        username: match[2],
-        pass: match[3],
-        host: match[4],
-        port: match[5],
-        database: match[6]
+        type: dbConfigSplit[1],
+        username: dbConfigSplit[2],
+        pass: dbConfigSplit[3],
+        host: dbConfigSplit[4],
+        port: dbConfigSplit[5],
+        database: dbConfigSplit[6]
       };
-
       this.config = newConfig;
     }
 
@@ -51,8 +49,6 @@ export default class mOrm {
       entities
     } = this.config;
 
-    console.log(dbConfig);
-
     switch (type) {
       case "postgres":
         this.dbInstance = new PostGreSQL({
@@ -64,9 +60,7 @@ export default class mOrm {
           synchronize,
           entities
         });
-
         this.dbInstance.dump();
-
         break;
 
       case "mysql":
