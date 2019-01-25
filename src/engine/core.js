@@ -6,4 +6,12 @@ export default class Core {
     this.password = password;
     this.database = database;
   }
+
+  dump() {
+    console.log(
+      `Host: ${this.host} :: Port: ${this.port} :: Username: ${
+        this.username
+      } :: Password: ${this.password} :: Database: ${this.database}`
+    );
+  }
 }
