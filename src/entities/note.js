@@ -13,6 +13,16 @@ export default class Note extends Entity {
           primary: true,
           type: "int",
           generated: true
+        },
+        id_student: {
+          primary: true,
+          type: "int",
+          generated: true
+        },
+        id_project: {
+          primary: true,
+          type: "int",
+          generated: true
         }
       }
     };
