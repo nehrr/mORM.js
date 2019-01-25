@@ -57,13 +57,9 @@ export default class Entity {
         if (isEmpty(attributes)) {
           const query = `SELECT * FROM ${table} WHERE id = ${id}`;
         } else {
-          let query = `SELECT * FROM ${table} WHERE id = ${id}`;
-          for (const key in attributes) {
-            if (attributes.hasOwnProperty(key)) {
-              const value = attributes[key];
-              query += ` AND ${key} = ${value}`;
-            }
-          }
+          let query = `SELECT ${attributes.join(
+            ","
+          )} FROM ${table} WHERE id = ${id}`;
         }
         dbInstance.client.query(query, (err, res) => {
           if (err) {
@@ -88,13 +84,7 @@ export default class Entity {
         if (isEmpty(attributes)) {
           const query = `SELECT * FROM ${table}`;
         } else {
-          let query = `SELECT * FROM ${table} WHERE `;
-          for (const key in attributes) {
-            if (attributes.hasOwnProperty(key)) {
-              const value = attributes[key];
-              query += ` AND ${key} = ${value}`;
-            }
-          }
+          const query = `SELECT ${attributes.join(",")} FROM ${table} WHERE `;
         }
         dbInstance.client.query(query, (err, res) => {
           if (err) {
@@ -118,12 +108,14 @@ export default class Entity {
       case "postgres":
         if (isEmpty(attributes)) {
           const query = `SELECT * FROM ${table}`;
+        } else if (isEmpty(where)) {
+          const query = `SELECT ${attributes.join(",")} FROM ${table} `;
         } else {
-          let query = `SELECT * FROM ${table} WHERE `;
-          for (const key in attributes) {
-            if (attributes.hasOwnProperty(key)) {
-              const value = attributes[key];
-              query += ` AND ${key} = ${value}`;
+          let query = `SELECT ${attributes.join(",")} FROM ${table} WHERE `;
+          for (const key in where) {
+            if (where.hasOwnProperty(key)) {
+              const value = where[key];
+              query += ` ${value}`;
             }
           }
         }
