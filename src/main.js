@@ -1,7 +1,7 @@
 import mOrm from "./mOrm";
 
 // Let's Rock!
-async () => {
+(async () => {
   const orm = new mOrm();
 
   try {
@@ -9,9 +9,9 @@ async () => {
       type: "postgres",
       host: "localhost",
       port: 5432,
-      username: "majdi",
-      password: "toumi",
-      database: "iLovePragmatic"
+      username: "ernoul",
+      password: "",
+      database: "mORM"
     });
 
     // or:
@@ -20,4 +20,4 @@ async () => {
     console.log(err);
     process.exit(-1);
   }
-};
+})();
