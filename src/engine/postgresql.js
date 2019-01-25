@@ -37,13 +37,13 @@ export default class PostgreSQL extends Core {
             if (err) {
               throw new Error(err.stack);
             } else {
-              console.log(`Table ${table} has been emptied`);
+              mLog(`Table ${table} has been emptied`);
             }
           });
         }
       }
 
-      console.log(`Connected to ${this.database}`);
+      mLog(`Connected to ${this.database}`);
     } catch (e) {
       throw new Error(`Database ${database} does not exist`);
     }
