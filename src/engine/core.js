@@ -1,3 +1,5 @@
+import mDump from "../libs/mDump";
+
 export default class Core {
   constructor({
     host,
@@ -18,10 +20,8 @@ export default class Core {
   }
 
   dump() {
-    console.log(
-      `Host: ${this.host} :: Port: ${this.port} :: Username: ${
-        this.username
-      } :: Password: ${this.password} :: Database: ${this.database}`
+    mDump(
+      `Host: ${this.host} :: Port: ${this.port} :: Username: ${ this.username} :: Password: ${this.password} :: Database: ${this.database}`
     );
   }
 }

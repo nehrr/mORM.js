@@ -17,7 +17,11 @@ export default class Student extends Entity {
         firstname: {
           type: "string"
         },
+<<<<<<< HEAD
         lastname: {
+=======
+        lasname: {
+>>>>>>> 20873522e63a285a66ae58772d13c92ae93fccc7
           type: "string"
         }
       }

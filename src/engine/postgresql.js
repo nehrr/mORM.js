@@ -1,6 +1,7 @@
 import Core from "./core";
 import { Client } from "pg";
 import { isEmpty } from "lodash";
+import mLog from "../libs/mLog";
 
 export default class PostgreSQL extends Core {
   constructor(options) {
