@@ -32,18 +32,18 @@ export default class PostgreSQL extends Core {
 
       if (synchronize && !isEmpty(entities)) {
         for (var i = 0; i < entities.length; i++) {
-          let table = entities[i].prototype.constructor.name.toLowerCase();
+          let table = entities[i].prototype.constructor.name;
           this.client.query(`DELETE FROM ${table}`, (err, res) => {
             if (err) {
               throw new Error(err.stack);
             } else {
-              console.log(`Table ${table} has been emptied`);
+              mLog(`Table ${table} has been emptied`);
             }
           });
         }
       }
 
-      console.log(`Connected to ${this.database}`);
+      mLog(`Connected to ${this.database}`);
     } catch (e) {
       throw new Error(`Database ${database} does not exist`);
     }
