@@ -31,7 +31,7 @@ export default class PostgreSQL extends Core {
 
       if (synchronize && !isEmpty(entities)) {
         for (var i = 0; i < entities.length; i++) {
-          let table = entities[i];
+          let table = entities[i].prototype.constructor.name.toLowerCase();
           this.client.query(`DELETE FROM ${table}`, (err, res) => {
             if (err) {
               throw new Error(err.stack);
