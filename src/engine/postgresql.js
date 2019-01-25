@@ -1,4 +1,4 @@
-export default class PostgreSQL extends Database {
+export default class PostgreSQL extends Core {
   // ...
   async initialize() {}
 }
