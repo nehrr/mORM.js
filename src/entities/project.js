@@ -1,8 +1,8 @@
 import Entity from "./entity";
 
 export default class Project extends Entity {
-  constructor(options) {
-    super(options);
+  constructor() {
+    super();
   }
 
   static meta() {
