@@ -8,9 +8,9 @@ export default class Entity {
 
   async save(data) {
     const table = this.name;
-    switch (dbInstance.type) {
+    switch (this.dbInstance.type) {
       case "postgres":
-        dbInstance.query(
+        this.dbInstance.query(
           `INSERT INTO ${table}(firstname, lastname) VALUES ($1, $2)`,
           data,
           (err, res) => {
@@ -32,9 +32,9 @@ export default class Entity {
   }
   async count() {
     const table = this.name;
-    switch (dbInstance.type) {
+    switch (this.dbInstance.type) {
       case "postgres":
-        dbInstance.client.query(`COUNT(*) FROM ${table}`, (err, res) => {
+        this.dbInstance.client.query(`COUNT(*) FROM ${table}`, (err, res) => {
           if (err) {
             throw new Error(err.stack);
           } else {
@@ -52,7 +52,7 @@ export default class Entity {
   }
   async findByPk(id, { attributes }) {
     const table = this.name;
-    switch (dbInstance.type) {
+    switch (this.dbInstance.type) {
       case "postgres":
         if (isEmpty(attributes)) {
           const query = `SELECT * FROM ${table} WHERE id = ${id}`;
@@ -61,7 +61,7 @@ export default class Entity {
             ","
           )} FROM ${table} WHERE id = ${id}`;
         }
-        dbInstance.client.query(query, (err, res) => {
+        this.dbInstance.client.query(query, (err, res) => {
           if (err) {
             throw new Error(err.stack);
           } else {
@@ -79,14 +79,14 @@ export default class Entity {
   }
   async findAll({ attributes }) {
     const table = this.name;
-    switch (dbInstance.type) {
+    switch (this.dbInstance.type) {
       case "postgres":
         if (isEmpty(attributes)) {
           const query = `SELECT * FROM ${table}`;
         } else {
           const query = `SELECT ${attributes.join(",")} FROM ${table} WHERE `;
         }
-        dbInstance.client.query(query, (err, res) => {
+        this.dbInstance.client.query(query, (err, res) => {
           if (err) {
             throw new Error(err.stack);
           } else {
@@ -104,7 +104,7 @@ export default class Entity {
   }
   async findOne({ where, attributes }) {
     const table = this.name;
-    switch (dbInstance.type) {
+    switch (this.dbInstance.type) {
       case "postgres":
         if (isEmpty(attributes)) {
           const query = `SELECT * FROM ${table}`;
@@ -119,7 +119,7 @@ export default class Entity {
             }
           }
         }
-        dbInstance.client.query(query, (err, res) => {
+        this.dbInstance.client.query(query, (err, res) => {
           if (err) {
             throw new Error(err.stack);
           } else {
