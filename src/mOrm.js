@@ -5,28 +5,38 @@ import MySQL from "./engine/mysql";
 import SQLite from "./engine/sqlite";
 
 export default class mOrm {
-  configPathName = "./mrom.config.js";
+  configPathName = "./mOrm.config.js";
 
   async createConnection(dbConfig = {}) {
-    switch (typeof dbConfig) {
-      case "string":
-        //regex to get params
-        //postgres://user:pass@host:port/dbname
-        break;
-      case "object":
-        if (isEmpty(dbConfig)) {
-          if (!fs.existsSync(this.configPathName)) {
-            throw new Error("Config required");
-          }
-          this.config = require(this.configPathName);
-        } else {
-          this.config = dbConfig;
+    if (typeof dbConfig === "object") {
+      if (isEmpty(dbConfig)) {
+        console.log("isEmpty");
+        if (!fs.existsSync(this.configPathName)) {
+          throw new Error("Config required");
         }
 
-        break;
+        this.config = require(this.configPathName);
+        console.log(this.config);
+      } else {
+        this.config = dbConfig;
+      }
+    } else if (typeof dbConfig === "string") {
+      //regex to get params
+      //postgres://user:pass@host:port/dbname
     }
 
-    const { host, port, username, pass, type, database } = this.config;
+    const {
+      host,
+      port,
+      username,
+      pass,
+      type,
+      database,
+      synchronize,
+      entities
+    } = this.config;
+
+    console.log(dbConfig);
 
     switch (type) {
       case "postgres":
@@ -35,8 +45,13 @@ export default class mOrm {
           port,
           username,
           pass,
-          database
+          database,
+          synchronize,
+          entities
         });
+
+        this.dbInstance.dump();
+
         break;
 
       case "mysql":

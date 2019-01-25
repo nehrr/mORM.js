@@ -18,7 +18,9 @@ export default class MySQL extends Core {
     });
 
     try {
-      await this.client.connect();
+      this.client.connect(err => {
+        throw new Error(`Database ${database} does not exist`);
+      });
       console.log("connected");
     } catch (e) {
       throw new Error(`Database ${database} does not exist`);
