@@ -3,9 +3,13 @@ import fs from "fs";
 import PostGreSQL from "./engine/postgresql";
 import MySQL from "./engine/mysql";
 import SQLite from "./engine/sqlite";
+import Student from "./entities/student";
+import Note from "./entities/note";
+import Project from "./entities/project";
 
 export default class mOrm {
   configPathName = "./mOrm.config.js";
+  entities = { Student, Project, Note };
 
   async createConnection(dbConfig = {}) {
     if (typeof dbConfig === "object") {
@@ -77,5 +81,9 @@ export default class mOrm {
     }
 
     await this.dbInstance.initialize();
+  }
+
+  getEntity(name) {
+    return new this.entities[name](this.dbInstance, name);
   }
 }

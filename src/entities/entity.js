@@ -5,7 +5,27 @@ export default class Entity {
   }
 
   async save(data) {}
-  async count() {}
+  async count() {
+    switch (dbInstance.type) {
+      case "postgres":
+        dbInstance.client.query(`COUNT(*) FROM ${name}`, (err, res) => {
+          if (err) {
+            throw new Error(err.stack);
+          } else {
+            console.log(res);
+          }
+        });
+        break;
+
+      case "mysql":
+        break;
+
+      case "sqlite":
+        break;
+
+      default:
+    }
+  }
   async findByPk(id, { attributes }) {}
   async findAll({ attributes }) {}
   async findOne({ where, attributes }) {}
