@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import fs from "fs";
+import path from "path";
 import PostGreSQL from "./engine/postgresql";
 import MySQL from "./engine/mysql";
 import SQLite from "./engine/sqlite";
@@ -15,10 +16,9 @@ export default class mOrm {
     if (typeof dbConfig === "object") {
       if (isEmpty(dbConfig)) {
         console.log("isEmpty");
-        if (!fs.existsSync(this.configPathName)) {
+        if (!fs.existsSync(path.join(__dirname, this.configPathName))) {
           throw new Error("Config required");
         }
-
         this.config = require(this.configPathName);
       } else {
         this.config = dbConfig;
@@ -47,7 +47,7 @@ export default class mOrm {
       database,
       synchronize,
       entities
-    } = this.config;
+    } = this.config.config;
 
     switch (type) {
       case "postgres":

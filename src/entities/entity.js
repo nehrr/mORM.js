@@ -1,4 +1,5 @@
 import mLog from "../libs/mLog";
+import { isEmpty } from "lodash";
 
 export default class Entity {
   constructor(dbInstance, name) {
@@ -70,10 +71,11 @@ export default class Entity {
     const table = this.name;
     switch (this.dbInstance.type) {
       case "postgres":
+        let query, res;
         if (isEmpty(attributes)) {
-          const query = `SELECT * FROM ${table} WHERE id = ${id}`;
+          query = `SELECT * FROM ${table} WHERE id = ${id}`;
         } else {
-          let query = `SELECT ${attributes.join(
+          query = `SELECT ${attributes.join(
             ","
           )} FROM ${table} WHERE id = ${id}`;
         }
@@ -98,15 +100,16 @@ export default class Entity {
     const table = this.name;
     switch (this.dbInstance.type) {
       case "postgres":
+        let query, res;
         if (isEmpty(attributes)) {
-          const query = `SELECT * FROM ${table}`;
+          query = `SELECT * FROM ${table}`;
         } else {
-          const query = `SELECT ${attributes.join(",")} FROM ${table} WHERE `;
+          query = `SELECT ${attributes.join(",")} FROM ${table} WHERE `;
         }
 
         try {
           res = await this.dbInstance.client.query(query);
-          return res.rows[0];
+          return res.rows;
         } catch (e) {
           throw new Error(e);
         }
@@ -124,18 +127,22 @@ export default class Entity {
     const table = this.name;
     switch (this.dbInstance.type) {
       case "postgres":
+        console.log(attributes);
+        let query, res;
         if (isEmpty(attributes)) {
-          const query = `SELECT * FROM ${table}`;
+          query = `SELECT * FROM ${table}`;
         } else if (isEmpty(where)) {
-          const query = `SELECT ${attributes.join(",")} FROM ${table} `;
+          query = `SELECT ${attributes.join(",")} FROM ${table} `;
         } else {
-          let query = `SELECT ${attributes.join(",")} FROM ${table} WHERE `;
+          query = `SELECT ${attributes.join(",")} FROM ${table} WHERE `;
           for (const key in where) {
             if (where.hasOwnProperty(key)) {
               const value = where[key];
-              query += ` ${value}`;
+              query += ` ${key} = '${value}'`;
             }
           }
+
+          query += " LIMIT 1";
         }
 
         try {
@@ -158,17 +165,16 @@ export default class Entity {
     const table = this.name;
     switch (this.dbInstance.type) {
       case "postgres":
-        this.dbInstance.client.query(
-          `UPDATE ${table}(firstname, lastname) VALUES ($1, $2)`,
-          data,
-          (err, res) => {
-            if (err) {
-              mLog(err.stack);
-            } else {
-              console.log(res.rows[0]);
-            }
-          }
-        );
+        let query, res;
+        query = `UPDATE ${table}(firstname, lastname) VALUES ($1, $2)`;
+
+        try {
+          res = await this.dbInstance.client.query(query);
+          return res.rows[0];
+        } catch (e) {
+          throw new Error(e);
+        }
+
         break;
 
       case "mysql":
