@@ -17,7 +17,7 @@ export default class Student extends Entity {
         firstname: {
           type: "string"
         },
-        fullname: {
+        lasname: {
           type: "string"
         }
       }
