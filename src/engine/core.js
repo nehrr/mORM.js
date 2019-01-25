@@ -5,8 +5,8 @@ export default class Core {
     username,
     password,
     database,
-    synchronize,
-    entities
+    synchronize = false,
+    entities = []
   }) {
     this.host = host;
     this.port = port;

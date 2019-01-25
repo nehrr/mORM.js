@@ -1,4 +1,10 @@
-export default class Student {
+import Entity from "./entity";
+
+export default class Student extends Entity {
+  constructor(options) {
+    super(options);
+  }
+
   static meta() {
     return {
       name: "Student",

@@ -1,5 +1,8 @@
 export default class Entity {
-  constructor(dbInstance, name) {}
+  constructor(dbInstance, name) {
+    this.dbInstance = dbInstance;
+    this.name = name;
+  }
 
   async save(data) {}
   async count() {}
