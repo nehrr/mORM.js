@@ -21,7 +21,7 @@ export default class Core {
 
   dump() {
     mDump(
-      `Host: ${this.host} :: Port: ${this.port} :: Username: ${ this.username} :: Password: ${this.password} :: Database: ${this.database}`
+      `Host: ${this.host} :: Port: ${this.port} :: Username: ${ this.username} :: Password: ${this.password || "No password"} :: Database: ${this.database}`
     );
   }
 }
