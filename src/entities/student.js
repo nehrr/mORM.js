@@ -1,8 +1,8 @@
 import Entity from "./entity";
 
 export default class Student extends Entity {
-  constructor() {
-    super();
+  constructor(dbInstance, name) {
+    super(dbInstance, name);
   }
 
   static meta() {

@@ -60,6 +60,8 @@ export default class mOrm {
           synchronize,
           entities
         });
+        this.dbInstance.type = type;
+
         this.dbInstance.dump();
         break;
 

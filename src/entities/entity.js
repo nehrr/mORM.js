@@ -10,17 +10,28 @@ export default class Entity {
     const table = this.name;
     switch (this.dbInstance.type) {
       case "postgres":
-        this.dbInstance.query(
-          `INSERT INTO ${table}(firstname, lastname) VALUES ($1, $2)`,
-          data,
-          (err, res) => {
-            if (err) {
-              mLog(err.stack);
-            } else {
-              mLog(res.rows[0]);
-            }
+        let res;
+        let keys = [];
+        let values = [];
+
+        for (const attribute in data) {
+          if (data.hasOwnProperty(attribute)) {
+            keys.push(attribute);
+            values.push(`'${data[attribute]}'`);
           }
-        );
+        }
+
+        const query = `INSERT INTO ${table}(${keys.join(
+          ","
+        )}) VALUES (${values.join(",")}) RETURNING *`;
+
+        try {
+          res = await this.dbInstance.client.query(query);
+          return res.rows[0];
+        } catch (e) {
+          throw new Error(e);
+        }
+
         break;
 
       case "mysql":
@@ -30,17 +41,21 @@ export default class Entity {
         break;
     }
   }
+
   async count() {
     const table = this.name;
     switch (this.dbInstance.type) {
       case "postgres":
-        this.dbInstance.client.query(`COUNT(*) FROM ${table}`, (err, res) => {
-          if (err) {
-            throw new Error(err.stack);
-          } else {
-            mLog(res);
-          }
-        });
+        let res;
+        const query = `SELECT COUNT(*) FROM ${table}`;
+
+        try {
+          res = await this.dbInstance.client.query(query);
+          return res.rows[0];
+        } catch (e) {
+          throw new Error(e);
+        }
+
         break;
 
       case "mysql":
@@ -50,6 +65,7 @@ export default class Entity {
         break;
     }
   }
+
   async findByPk(id, { attributes }) {
     const table = this.name;
     switch (this.dbInstance.type) {
@@ -61,13 +77,13 @@ export default class Entity {
             ","
           )} FROM ${table} WHERE id = ${id}`;
         }
-        this.dbInstance.client.query(query, (err, res) => {
-          if (err) {
-            throw new Error(err.stack);
-          } else {
-            mLog(res);
-          }
-        });
+
+        try {
+          res = await this.dbInstance.client.query(query);
+          return res.rows[0];
+        } catch (e) {
+          throw new Error(e);
+        }
         break;
 
       case "mysql":
@@ -77,6 +93,7 @@ export default class Entity {
         break;
     }
   }
+
   async findAll({ attributes }) {
     const table = this.name;
     switch (this.dbInstance.type) {
@@ -86,13 +103,13 @@ export default class Entity {
         } else {
           const query = `SELECT ${attributes.join(",")} FROM ${table} WHERE `;
         }
-        this.dbInstance.client.query(query, (err, res) => {
-          if (err) {
-            throw new Error(err.stack);
-          } else {
-            mLog(res);
-          }
-        });
+
+        try {
+          res = await this.dbInstance.client.query(query);
+          return res.rows[0];
+        } catch (e) {
+          throw new Error(e);
+        }
         break;
 
       case "mysql":
@@ -102,6 +119,7 @@ export default class Entity {
         break;
     }
   }
+
   async findOne({ where, attributes }) {
     const table = this.name;
     switch (this.dbInstance.type) {
@@ -119,13 +137,13 @@ export default class Entity {
             }
           }
         }
-        this.dbInstance.client.query(query, (err, res) => {
-          if (err) {
-            throw new Error(err.stack);
-          } else {
-            mLog(res);
-          }
-        });
+
+        try {
+          res = await this.dbInstance.client.query(query);
+          return res.rows[0];
+        } catch (e) {
+          throw new Error(e);
+        }
         break;
 
       case "mysql":
@@ -135,6 +153,31 @@ export default class Entity {
         break;
     }
   }
-  async update(data) {}
+
+  async update(data) {
+    const table = this.name;
+    switch (this.dbInstance.type) {
+      case "postgres":
+        this.dbInstance.client.query(
+          `UPDATE ${table}(firstname, lastname) VALUES ($1, $2)`,
+          data,
+          (err, res) => {
+            if (err) {
+              mLog(err.stack);
+            } else {
+              console.log(res.rows[0]);
+            }
+          }
+        );
+        break;
+
+      case "mysql":
+        break;
+
+      case "sqlite":
+        break;
+    }
+  }
+
   async remove(data) {}
 }
