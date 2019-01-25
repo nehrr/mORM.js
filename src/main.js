@@ -6,7 +6,7 @@ import mOrm from "./mOrm";
 
   try {
     await orm.createConnection({
-      type: "postgres",
+      type: "mysql",
       host: "localhost",
       port: 5432,
       username: "ernoul",

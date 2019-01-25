@@ -1,6 +1,8 @@
 import { isEmpty } from "lodash";
 import fs from "fs";
 import PostGreSQL from "./engine/postgresql";
+import MySQL from "./engine/mysql";
+import SQLite from "./engine/sqlite";
 
 export default class mOrm {
   configPathName = "./mrom.config.js";
