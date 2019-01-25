@@ -1,25 +1,17 @@
 import Core from "./core";
-import sqlite3 from "sqlite3";
+const sqlite3 = require("sqlite3").verbose();
 
 export default class SQLite extends Core {
   constructor(options) {
     super(options);
   }
 
-  // async initialize() {
-  //   const { host, port, username, password, database } = this;
-  //
-  //   try {
-  //     this.client = new sqlite3.Database({
-  //       user: username,
-  //       host,
-  //       database,
-  //       password,
-  //       port
-  //     });
-  //     console.log("connected");
-  //   } catch (e) {
-  //     throw new Error(`Database ${database} does not exist`);
-  //   }
-  // }
+  async initialize() {
+    const db = new sqlite3.Database(":memory.db:", err => {
+      if (err) {
+        throw new Error(err.message);
+      }
+      console.log("Connected to the in-memory SQlite database.");
+    });
+  }
 }

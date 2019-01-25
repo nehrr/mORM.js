@@ -127,7 +127,6 @@ export default class Entity {
     const table = this.name;
     switch (this.dbInstance.type) {
       case "postgres":
-        console.log(attributes);
         let query, res;
         if (isEmpty(attributes)) {
           query = `SELECT * FROM ${table}`;
@@ -165,8 +164,15 @@ export default class Entity {
     const table = this.name;
     switch (this.dbInstance.type) {
       case "postgres":
-        let query, res;
-        query = `UPDATE ${table}(firstname, lastname) VALUES ($1, $2)`;
+        let res, query;
+
+        query = `UPDATE ${table} SET`;
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            const value = data[key];
+            query += ` ${key} = '${value}'`;
+          }
+        }
 
         try {
           res = await this.dbInstance.client.query(query);
